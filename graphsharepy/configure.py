@@ -92,7 +92,7 @@ for adjust, line in enumerate(rid_lines):
 file = open("temp_secret.py", 'w')
 
     
-old_data.append(f"{sharepoint}" + " = {" + f"'user':{user}, 'password':{pas}, 'host':{host}, 'tenant':{tenant_id}, 'app_id':{app_id}, 'sec_val':{sec_val}, 'sharepoint':{sharepoint}" + "}")
+old_data.append(f"{sharepoint}" + " = {" + f"'user':'{user}', 'password':'{pas}', 'host':'{host}', 'tenant':'{tenant_id}', 'app_id':'{app_id}', 'sec_val':'{sec_val}', 'sharepoint':'{sharepoint}'" + "}")
 
 file.writelines(old_data)
     
