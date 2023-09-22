@@ -1,3 +1,13 @@
+"""
+Security functions that make sure we are handeling passwords correctly
+
+Michael P. Vossen
+Created 9/22/2023
+
+
+"""
+
+
 def wipe_mem(value):
     """
     Function to wipe a string variable in memory.  It replaces
