@@ -3,6 +3,8 @@ import json
 import msal
 import urllib
 import os
+from secret import secret_info
+
 
 """
 Class that handles uploading, downloading, and deleting sharepoint files using the OAuth2 authentication and the Microsoft Graph API
@@ -16,7 +18,7 @@ Michael P. Vossen
 
 
 class OAuth2_SharePoint:
-    def __init__(self, First=False):
+    def __init__(self, sharepoint_name, hostname, email, First=False):
         """
         The initalization of the object. 
         
@@ -36,35 +38,16 @@ class OAuth2_SharePoint:
         
         Last Updated: 10/17/2022
         """
-        
+        self.__sharepoint_info__ = secret_info[f"{sharepoint_name}_{email}_{hostname}"]
  
-        self.__application_id__ = 
-        self.__secret_value__ = 
-            
-
-        
-        
-        """
-        This section contains the authentication for the Innovative Weather
-        service account.  We must always use the Innovative Weather service
-        account.
-        """
-        
-        self.__uwm_id__ = 
-        self.__uwm_password__ = 
-        
         
         """
         This section conatins the UWM tennant ID so OAuth2 recognizes we are 
         associated with UWM.
         
-        This comes from https://login.microsoftonline.com/panthers.onmicrosoft.com/.well-known/openid-configuration
-        Its the long string of numbers and letters between .com/ and /oauth2 in the top url.
         """
-        
-        self.__tennant_id__ = "0bca7ac3-fcb6-4efd-89eb-6de97603cf21"
-        
-        self.__authority_url__ =  f'https://login.microsoftonline.com/{self.__tennant_id__}'
+
+        self.__authority_url__ =  f'https://login.microsoftonline.com/{self.__sharepoint_info__['tenant']}'
         
         
         """
@@ -72,21 +55,7 @@ class OAuth2_SharePoint:
         SharePoint
         """
         self.permissions = ['Sites.ReadWrite.All', 'Files.ReadWrite.All']
-        
-        """
-        This sets the general url of UWM's SharePoint
-        """
-        self.sharepoint_host_name = 'panthers.sharepoint.com'
-        
-        
-        """
-        This is the name of our SharePoint site
-        """
-
-        self.sharepoint_name = "InnovativeWeatherWebsite-Group"
-        
-        
-
+      
         
         """
         Finally we are going to set the resorce that we are going to access.
@@ -108,10 +77,10 @@ class OAuth2_SharePoint:
         
         """
         if First == False:
-            pca = msal.ConfidentialClientApplication(self.__application_id__, self.__secret_value__, authority = self.__authority_url__)
+            pca = msal.ConfidentialClientApplication(self.__sharepoint_info__['app_id'], self.__sharepoint_info__['sec_val'], authority = self.__authority_url__)
             
             #get our oauth token            
-            self.__token__ = pca.acquire_token_by_username_password(self.__uwm_id__, self.__uwm_password__, self.permissions)
+            self.__token__ = pca.acquire_token_by_username_password(self.__sharepoint_info__['user'], self.__sharepoint_info__['password'], self.permissions)
             
             #create the header with our oauth token for later api requests.
             self.__headers__ = {'Authorization': 'Bearer {}'.format(self.__token__['access_token'])}
@@ -124,7 +93,7 @@ class OAuth2_SharePoint:
             located.
             """
         
-            result = requests.get(f'{self.endpoint}/sites/{self.sharepoint_host_name}:/sites/{self.sharepoint_name}', headers=self.__headers__)
+            result = requests.get(f"{self.endpoint}/sites/{self.__sharepoint_info__['host']}:/sites/{self.__sharepoint_info__['sharepoint']}", headers=self.__headers__)
             site_info = result.json()
             self.__site_id__ = site_info['id']
             result = requests.get(f'{self.endpoint}/sites/{self.__site_id__}/drive', headers=self.__headers__)
