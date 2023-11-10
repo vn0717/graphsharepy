@@ -4,3 +4,6 @@ Graphsharepy is designed to create a way to upload, download, and delete files o
 
 ### Instructions
 Comming Soon
+
+### Disclaimer
+This code is still undergoing it's inital build.  Features are subject to frequent change and bugs are still being worked out.
