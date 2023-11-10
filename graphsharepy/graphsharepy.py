@@ -3,7 +3,7 @@ import json
 import msal
 import urllib
 import os
-from secret import secret_info
+import secure as sec
 
 
 """
@@ -28,16 +28,11 @@ class OAuth2_SharePoint:
                 the application id and secret value.  If set to True, this will run the interactive mode
                 that allows you to approve this application to use your credentials.
         """
+        try:
+            from secret import secret_info
+        except:
+            raise Exception("No secrets exist.  Please run the configureation scirpt or maunally create and update the secret.py file.")
         
-        
-        """
-        The section below contains the OAuth2 related secrets
-        Note: These values expire every 12 months.  When you need to update
-        these values contact Adam Zembrosky (asz@uwm.edu) and run this class
-        with the input First set to true. 
-        
-        Last Updated: 10/17/2022
-        """
         self.__sharepoint_info__ = secret_info[f"{sharepoint_name}_{email}_{hostname}"]
  
         
@@ -112,7 +107,7 @@ class OAuth2_SharePoint:
             
             pca.acquire_token_interactive(self.permissions)
 
-        
+        sec.wipe_dictonary(self.__sharepoint_info__)
     
     def upload_file(self, local_item, item_remote_directory, multiple = False):
         """

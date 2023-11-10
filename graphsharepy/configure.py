@@ -6,7 +6,7 @@ Created 9/22/2023
 
 """
 
-#import graphsharepy as gsp   
+import graphsharepy as gsp   
 import getpass
 import requests
 import os
@@ -208,4 +208,4 @@ os.remove("temp_secret.py")
 
 if option == "1":
     #run the initalization
-    pass     
+    gsp.OAuth2_SharePoint(sharepoint, host, user, First=True)

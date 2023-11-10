@@ -53,3 +53,23 @@ def wipe_subval(key, string):
             string = string[:i+loc] + "0" + string[i+loc + 1:]
 
     return string
+
+def wipe_dictonary(in_dict):
+    """
+    Funtion to wipe the memory of secure keys within a dictonary.
+    Replaces characters in the secure key with 0s
+
+    Args:
+        in_dict (DICT): Dictonary containg secure keys
+
+    Returns:
+        DICT: Dictonary with secure key values replaced by 0s
+    """
+    keys = list(in_dict.keys())
+    if len(keys != 0):
+        for key in keys:
+            for sec_key in ["password", "sec_val", "app_id"]:
+                in_dict[key][sec_key] = wipe_mem(in_dict[key][sec_key])
+    
+    return in_dict
+        
